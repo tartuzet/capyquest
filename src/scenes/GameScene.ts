@@ -250,13 +250,23 @@ export class GameScene extends Phaser.Scene {
     const next = LevelManager.getNextLevel(this.level.id);
     this.audio.playLevelUp(this);
 
-    if (next === 'boss') {
+    if (next === 'BossScene') {
       this.scene.start('BossScene', { lives: this.lives, score: this.score, seeds: this.seeds });
       return;
     }
 
+    if (next === 'IntermediateBossScene') {
+      this.scene.start('IntermediateBossScene', { lives: this.lives, score: this.score, seeds: this.seeds, nextLevelId: this.level.id + 1 });
+      return;
+    }
+
+    if (next === 'BossFrogScene') {
+      this.scene.start('BossFrogScene', { lives: this.lives, score: this.score, seeds: this.seeds, nextLevelId: this.level.id + 1 });
+      return;
+    }
+
     this.scene.start('GameScene', {
-      levelId: next,
+      levelId: next as number,
       lives: this.lives,
       score: this.score,
       seeds: this.seeds

@@ -1,20 +1,20 @@
 import Phaser from 'phaser';
 
-export class Boss extends Phaser.Physics.Arcade.Sprite {
+export class BossCrab extends Phaser.Physics.Arcade.Sprite {
   hp = 3;
   vulnerable = true;
   direction = -1;
-  private speed = 110;
-  private readonly minX = 220;
-  private readonly maxX = 790;
+  private speed = 100;
+  private readonly minX = 200;
+  private readonly maxX = 780;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 'boss-caiman');
+    super(scene, x, y, 'boss-crab');
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.setSize(146, 52);
-    this.setOffset(18, 35);
+    this.setSize(160, 80);
+    this.setOffset(16, 30);
     this.setCollideWorldBounds(true);
   }
 
@@ -46,7 +46,7 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
     this.scene.time.delayedCall(900, () => {
       this.clearTint();
       this.vulnerable = true;
-      this.speed += 35;
+      this.speed += 30;
     });
 
     return this.hp <= 0;

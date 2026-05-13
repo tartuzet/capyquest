@@ -22,6 +22,7 @@ export class PreloadScene extends Phaser.Scene {
   preload(): void {
     this.load.audio('bg-music', '/assets/audio/bg-music.mp3');
     this.load.audio('final-boss', '/assets/audio/final_boss.mp3');
+    this.load.audio('intermediate-boss', '/assets/audio/final_boss.mp3');
     this.load.audio('level-up', '/assets/audio/levelup.mp3');
     this.load.audio('capi-hit', '/assets/audio/capi_hit.mp3');
     this.load.audio('capi-jump', '/assets/audio/capi_jump.mp3');
@@ -264,6 +265,8 @@ export class PreloadScene extends Phaser.Scene {
     this.makeBatTexture();
     this.makeSmallCaimanTexture();
     this.makeBossTexture();
+    this.makeBossCrabTexture();
+    this.makeBossFrogTexture();
   }
 
   private makeFrogTexture(): void {
@@ -506,6 +509,171 @@ export class PreloadScene extends Phaser.Scene {
 
     g.generateTexture('boss-caiman', 192, 96);
     g.destroy();
+  }
+
+  private makeBossCrabTexture(): void {
+    const g = this.add.graphics();
+    const outline = 0x4a150d;
+    const shell = 0xc44a2e;
+    const shellDark = 0x8a2e1c;
+    const shellLight = 0xe86842;
+    const claw = 0xd95a3e;
+    const clawDark = 0x8a2012;
+
+    g.fillStyle(0x000000, 0.2);
+    g.fillEllipse(96, 110, 170, 14);
+
+    g.fillStyle(shellDark, 1);
+    g.fillEllipse(96, 75, 110, 60);
+    g.lineStyle(4, outline, 1);
+    g.fillStyle(shell, 1);
+    g.fillEllipse(96, 70, 100, 50);
+    g.strokeEllipse(96, 70, 100, 50);
+
+    g.fillStyle(shellLight, 1);
+    g.fillEllipse(70, 60, 40, 25);
+    g.fillEllipse(120, 60, 40, 25);
+    g.lineStyle(3, outline, 1);
+    g.strokeEllipse(70, 60, 40, 25);
+    g.strokeEllipse(120, 60, 40, 25);
+
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(75, 50, 10);
+    g.fillCircle(115, 50, 10);
+    g.fillStyle(0x111111, 1);
+    g.fillCircle(75, 50, 5);
+    g.fillCircle(115, 50, 5);
+    g.fillStyle(0xff4444, 1);
+    g.fillCircle(77, 48, 2);
+    g.fillCircle(117, 48, 2);
+
+    g.lineStyle(3, outline, 1);
+    g.fillStyle(clawDark, 1);
+    this.drawCrabClaw(g, 30, 75, -1, outline, claw);
+    this.drawCrabClaw(g, 162, 75, 1, outline, claw);
+
+    g.fillStyle(0x3a150d, 1);
+    g.fillEllipse(50, 95, 18, 10);
+    g.fillEllipse(142, 95, 18, 10);
+    g.fillEllipse(80, 100, 18, 10);
+    g.fillEllipse(112, 100, 18, 10);
+
+    g.lineStyle(3, outline, 1);
+    g.fillStyle(shellDark, 1);
+    this.drawCrabLeg(g, 50, 95, -1);
+    this.drawCrabLeg(g, 142, 95, 1);
+    this.drawCrabLeg(g, 65, 100, -1);
+    this.drawCrabLeg(g, 127, 100, 1);
+
+    g.fillStyle(0x1a0a05, 1);
+    g.fillEllipse(96, 95, 60, 8);
+    g.fillStyle(0xfff2c0, 1);
+    for (let x = 70; x < 125; x += 8) {
+      g.fillTriangle(x, 91, x + 3, 99, x + 6, 92);
+    }
+
+    g.generateTexture('boss-crab', 192, 120);
+    g.destroy();
+  }
+
+  private drawCrabClaw(g: Phaser.GameObjects.Graphics, x: number, y: number, direction: number, outline: number, claw: number): void {
+    g.lineStyle(4, outline, 1);
+    g.fillStyle(claw, 1);
+    g.fillEllipse(x, y, 45, 30);
+    g.strokeEllipse(x, y, 45, 30);
+
+    g.fillStyle(claw, 1);
+    g.fillTriangle(x - 20 * direction, y - 10, x - 35 * direction, y - 35, x - 25 * direction, y + 5);
+    g.strokeTriangle(x - 20 * direction, y - 10, x - 35 * direction, y - 35, x - 25 * direction, y + 5);
+
+    g.fillStyle(0x8a2012, 1);
+    g.fillTriangle(x - 15 * direction, y - 8, x - 30 * direction, y - 25, x - 20 * direction, y);
+    g.strokeTriangle(x - 15 * direction, y - 8, x - 30 * direction, y - 25, x - 20 * direction, y);
+  }
+
+  private drawCrabLeg(g: Phaser.GameObjects.Graphics, x: number, y: number, direction: number): void {
+    g.lineStyle(3, 0x4a150d, 1);
+    g.fillStyle(0x8a2e1c, 1);
+    g.fillRoundedRect(x - 5, y - 4, 12, 10, 3);
+    g.strokeRoundedRect(x - 5, y - 4, 12, 10, 3);
+    g.lineBetween(x, y + 5, x + 10 * direction, y + 15);
+  }
+
+  private makeBossFrogTexture(): void {
+    const g = this.add.graphics();
+    const outline = 0x0d2f0d;
+    const body = 0x4fbd55;
+    const bodyLight = 0x79d86d;
+    const belly = 0x8ae17e;
+
+    g.fillStyle(0x000000, 0.2);
+    g.fillEllipse(96, 110, 170, 14);
+
+    g.lineStyle(4, outline, 1);
+    g.fillStyle(body, 1);
+    g.fillEllipse(96, 75, 110, 65);
+    g.strokeEllipse(96, 75, 110, 65);
+
+    g.fillStyle(bodyLight, 1);
+    g.fillEllipse(55, 58, 45, 45);
+    g.fillEllipse(137, 58, 45, 45);
+    g.lineStyle(3, outline, 1);
+    g.strokeEllipse(55, 58, 45, 45);
+    g.strokeEllipse(137, 58, 45, 45);
+
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(55, 55, 12);
+    g.fillCircle(137, 55, 12);
+    g.fillStyle(0x101710, 1);
+    g.fillCircle(58, 57, 6);
+    g.fillCircle(134, 57, 6);
+
+    g.lineStyle(4, outline, 1);
+    g.lineBetween(31, 40, 55, 47);
+    g.lineBetween(161, 40, 137, 47);
+
+    g.fillStyle(0xc44a6e, 1);
+    g.fillEllipse(96, 95, 90, 14);
+    g.lineStyle(3, 0x8a2e4a, 1);
+    g.fillEllipse(96, 92, 80, 10);
+    g.strokeEllipse(96, 92, 80, 10);
+    g.fillEllipse(96, 98, 50, 8);
+
+    g.fillStyle(belly, 1);
+    g.fillEllipse(96, 88, 70, 12);
+    g.lineStyle(2, 0x3a6b3a, 1);
+    g.beginPath();
+    g.arc(96, 88, 35, Phaser.Math.DegToRad(5), Phaser.Math.DegToRad(175));
+    g.strokePath();
+
+    g.fillStyle(0x173b1f, 1);
+    g.fillEllipse(50, 108, 40, 14);
+    g.fillEllipse(142, 108, 40, 14);
+    g.fillEllipse(70, 112, 40, 14);
+    g.fillEllipse(122, 112, 40, 14);
+
+    g.lineStyle(3, outline, 1);
+    g.fillStyle(bodyLight, 1);
+    this.drawBossFrogLeg(g, 50, 108, -1);
+    this.drawBossFrogLeg(g, 142, 108, 1);
+    this.drawBossFrogLeg(g, 70, 112, -1);
+    this.drawBossFrogLeg(g, 122, 112, 1);
+
+    g.fillStyle(0xf28f8f, 0.75);
+    g.fillCircle(42, 70, 6);
+    g.fillCircle(150, 70, 6);
+
+    g.generateTexture('boss-frog', 192, 120);
+    g.destroy();
+  }
+
+  private drawBossFrogLeg(g: Phaser.GameObjects.Graphics, x: number, y: number, direction: number): void {
+    g.lineStyle(3, 0x0d2f0d, 1);
+    g.fillStyle(0x79d86d, 1);
+    g.fillRoundedRect(x - 8, y - 6, 18, 14, 6);
+    g.strokeRoundedRect(x - 8, y - 6, 18, 14, 6);
+    g.lineBetween(x + 2, y + 7, x + 12 * direction, y + 18);
+    g.lineBetween(x - 2, y + 7, x + 8 * direction, y + 16);
   }
 
   private drawBossLeg(g: Phaser.GameObjects.Graphics, x: number, y: number, outline: number): void {

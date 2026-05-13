@@ -4,9 +4,19 @@ export class LevelManager {
   static firstLevel = 1;
   static finalLevel = levels.length;
 
-  static getNextLevel(currentLevel: number): number | 'boss' {
+  static readonly bossLevels = new Map<number, string>([
+    [5, 'BossFrogScene'],
+    [10, 'IntermediateBossScene']
+  ]);
+
+  static getNextLevel(currentLevel: number): number | string {
     if (currentLevel >= this.finalLevel) {
-      return 'boss';
+      return 'BossScene';
+    }
+
+    const bossScene = this.bossLevels.get(currentLevel);
+    if (bossScene) {
+      return bossScene;
     }
 
     return currentLevel + 1;

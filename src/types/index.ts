@@ -52,4 +52,5 @@ export interface GameSceneData {
   lives?: number;
   score?: number;
   seeds?: number;
+  nextLevelId?: number;
 }

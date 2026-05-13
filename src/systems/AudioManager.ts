@@ -35,6 +35,10 @@ export class AudioManager {
     this.startLoop(scene, 'final-boss', 0.75);
   }
 
+  startIntermediateBossMusic(scene: Phaser.Scene): void {
+    this.startLoop(scene, 'intermediate-boss', 0.75);
+  }
+
   stopMusic(): void {
     if (!this.music) {
       return;
