@@ -179,10 +179,258 @@ export const levels: LevelData[] = [
     theme: 'Nivel final hacia el boss.',
     playerStart: { x: 80, y: 420 },
     goal: { x: 890, y: 410, width: 42, height: 100 },
-    platforms: [baseGround, { x: 300, y: 390, width: 150, height: 24 }, { x: 550, y: 330, width: 150, height: 24, moving: { axis: 'x', distance: 100, speed: 65 } }, { x: 780, y: 390, width: 130, height: 24 }],
-    hazards: [{ type: 'spikes', x: 450, y: 470, width: 120, height: 28 }, { type: 'mud', x: 650, y: 490, width: 120, height: 24 }],
-    collectibles: [{ type: 'watermelon', x: 300, y: 340 }, { type: 'golden-seed', x: 780, y: 340 }],
+    platforms: [baseGround,
+      { x: 300, y: 390, width: 150, height: 24 },
+      { x: 550, y: 330, width: 150, height: 24, moving: { axis: 'x', distance: 100, speed: 65 } },
+      { x: 780, y: 390, width: 130, height: 24 }
+    ],
+    hazards: [
+      { type: 'spikes', x: 450, y: 470, width: 120, height: 28 },
+      { type: 'mud', x: 650, y: 490, width: 120, height: 24 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 300, y: 340 },
+      { type: 'golden-seed', x: 780, y: 340 }
+    ],
     enemies: [{ kind: 'small-caiman', x: 620, y: 460, patrolDistance: 150, speed: 95 }]
+  },
+  // =================== MUNDO 2: Ruinas del Volcán ===================
+  {
+    id: 16,
+    name: 'Camino de las Ruinas',
+    theme: 'Introduccion al volcan.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 250, y: 410, width: 150, height: 24 },
+      { x: 460, y: 350, width: 140, height: 24 },
+      { x: 680, y: 290, width: 160, height: 24 },
+      { x: 820, y: 410, width: 120, height: 24 }
+    ],
+    hazards: [
+      { type: 'lava', x: 360, y: 520, width: 140, height: 20 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 250, y: 360 },
+      { type: 'watermelon', x: 460, y: 300 },
+      { type: 'golden-seed', x: 680, y: 240 }
+    ],
+    enemies: [{ kind: 'cave-bat', x: 560, y: 260, patrolDistance: 130, speed: 70 }]
+  },
+  {
+    id: 17,
+    name: 'Túneles de Vapor',
+    theme: 'Vapor y plataformas moviles.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 300, y: 410, width: 130, height: 24, moving: { axis: 'y', distance: 70, speed: 50 } },
+      { x: 520, y: 340, width: 130, height: 24 },
+      { x: 720, y: 300, width: 130, height: 24, moving: { axis: 'x', distance: 90, speed: 55 } },
+      { x: 840, y: 390, width: 100, height: 24 }
+    ],
+    hazards: [
+      { type: 'lava', x: 420, y: 525, width: 200, height: 20 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 300, y: 350 },
+      { type: 'watermelon', x: 520, y: 290 },
+      { type: 'golden-seed', x: 720, y: 250 }
+    ],
+    enemies: [
+      { kind: 'iguana', x: 650, y: 460, patrolDistance: 120, speed: 60 }
+    ]
+  },
+  {
+    id: 18,
+    name: 'La Montaña Quebrada',
+    theme: 'Rocas que caen y plataformas quebradizas.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 280, y: 410, width: 140, height: 24, breakable: true },
+      { x: 500, y: 360, width: 140, height: 24 },
+      { x: 700, y: 300, width: 140, height: 24, breakable: true },
+      { x: 810, y: 390, width: 120, height: 24 }
+    ],
+    hazards: [
+      { type: 'lava', x: 300, y: 525, width: 400, height: 20 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 500, y: 310 },
+      { type: 'watermelon', x: 700, y: 250 }
+    ],
+    enemies: [
+      { kind: 'rock-beetle', x: 400, y: 460, patrolDistance: 100, speed: 40 },
+      { kind: 'cave-bat', x: 620, y: 240, patrolDistance: 140, speed: 75 }
+    ]
+  },
+  {
+    id: 19,
+    name: 'Selva de Piedra',
+    theme: 'Palancas, puertas y totems.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 300, y: 400, width: 140, height: 24 },
+      { x: 500, y: 350, width: 140, height: 24 },
+      { x: 700, y: 310, width: 140, height: 24, disappearing: true },
+      { x: 810, y: 390, width: 120, height: 24 }
+    ],
+    hazards: [
+      { type: 'lava', x: 250, y: 525, width: 200, height: 20 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 300, y: 350 },
+      { type: 'watermelon', x: 700, y: 260 },
+      { type: 'golden-seed', x: 500, y: 300 }
+    ],
+    enemies: [
+      { kind: 'totem', x: 400, y: 420, patrolDistance: 0, speed: 0 },
+      { kind: 'iguana', x: 640, y: 460, patrolDistance: 110, speed: 65 }
+    ],
+    levers: [
+      { x: 300, y: 385, doorX: 750, doorY: 370, doorWidth: 20, doorHeight: 80 }
+    ]
+  },
+  {
+    id: 20,
+    name: 'Enfrentamiento: Jaguar',
+    theme: 'Jefe del volcan.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 300, y: 390, width: 150, height: 24 },
+      { x: 550, y: 330, width: 150, height: 24 },
+      { x: 780, y: 390, width: 130, height: 24 }
+    ],
+    hazards: [],
+    collectibles: [
+      { type: 'watermelon', x: 550, y: 280 },
+      { type: 'golden-seed', x: 780, y: 340 }
+    ],
+    enemies: []
+  },
+  {
+    id: 21,
+    name: 'Cueva de Cristales',
+    theme: 'Cristales afilados y serpientes.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 300, y: 400, width: 140, height: 24 },
+      { x: 480, y: 350, width: 140, height: 24, moving: { axis: 'y', distance: 60, speed: 40 } },
+      { x: 680, y: 300, width: 140, height: 24 },
+      { x: 820, y: 390, width: 110, height: 24 }
+    ],
+    hazards: [
+      { type: 'spikes', x: 460, y: 470, width: 80, height: 28 },
+      { type: 'spikes', x: 600, y: 440, width: 60, height: 28 },
+      { type: 'lava', x: 200, y: 525, width: 150, height: 20 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 300, y: 350 },
+      { type: 'golden-seed', x: 680, y: 250 }
+    ],
+    enemies: [
+      { kind: 'cave-bat', x: 550, y: 240, patrolDistance: 140, speed: 85 },
+      { kind: 'snake', x: 400, y: 460, patrolDistance: 100, speed: 55 }
+    ]
+  },
+  {
+    id: 22,
+    name: 'Rio de Lava',
+    theme: 'Lava, plataformas y aves de fuego.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 280, y: 410, width: 130, height: 24, moving: { axis: 'x', distance: 80, speed: 65 } },
+      { x: 500, y: 360, width: 130, height: 24, moving: { axis: 'y', distance: 70, speed: 50 } },
+      { x: 720, y: 310, width: 130, height: 24 },
+      { x: 840, y: 390, width: 100, height: 24 }
+    ],
+    hazards: [
+      { type: 'lava', x: 380, y: 525, width: 300, height: 20 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 500, y: 310 },
+      { type: 'watermelon', x: 720, y: 260 }
+    ],
+    enemies: [
+      { kind: 'fire-bird', x: 600, y: 220, patrolDistance: 160, speed: 90 }
+    ]
+  },
+  {
+    id: 23,
+    name: 'Templo de las Semillas',
+    theme: 'Llaves y totems en ruinas.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 260, y: 400, width: 140, height: 24 },
+      { x: 460, y: 350, width: 140, height: 24, disappearing: true },
+      { x: 660, y: 300, width: 140, height: 24 },
+      { x: 800, y: 370, width: 120, height: 24 }
+    ],
+    hazards: [
+      { type: 'spikes', x: 540, y: 470, width: 80, height: 28 },
+      { type: 'lava', x: 160, y: 525, width: 140, height: 20 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 260, y: 350 },
+      { type: 'golden-seed', x: 660, y: 250 }
+    ],
+    enemies: [
+      { kind: 'totem', x: 500, y: 420, patrolDistance: 0, speed: 0 },
+      { kind: 'iguana', x: 350, y: 460, patrolDistance: 100, speed: 60 }
+    ],
+    levers: [
+      { x: 260, y: 385, doorX: 720, doorY: 360, doorWidth: 20, doorHeight: 80 }
+    ]
+  },
+  {
+    id: 24,
+    name: 'Ascenso al Crater',
+    theme: 'Desafio final del volcan.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 250, y: 410, width: 130, height: 24, breakable: true },
+      { x: 430, y: 360, width: 140, height: 24, moving: { axis: 'x', distance: 70, speed: 65 } },
+      { x: 630, y: 310, width: 140, height: 24, breakable: true },
+      { x: 780, y: 380, width: 130, height: 24 }
+    ],
+    hazards: [
+      { type: 'lava', x: 300, y: 525, width: 400, height: 20 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 250, y: 360 },
+      { type: 'watermelon', x: 630, y: 260 },
+      { type: 'golden-seed', x: 430, y: 310 }
+    ],
+    enemies: [
+      { kind: 'cave-bat', x: 580, y: 230, patrolDistance: 160, speed: 85 },
+      { kind: 'iguana', x: 700, y: 460, patrolDistance: 110, speed: 70 },
+      { kind: 'rock-beetle', x: 480, y: 460, patrolDistance: 90, speed: 45 }
+    ],
+    windZones: [
+      { x: 380, y: 200, width: 100, height: 300, forceX: -120 }
+    ]
+  },
+  {
+    id: 25,
+    name: 'Enfrentamiento: Condor',
+    theme: 'Jefe final del volcan.',
+    playerStart: { x: 80, y: 420 },
+    goal: { x: 890, y: 410, width: 42, height: 100 },
+    platforms: [baseGround,
+      { x: 300, y: 390, width: 150, height: 24 },
+      { x: 550, y: 330, width: 150, height: 24 },
+      { x: 780, y: 390, width: 130, height: 24 }
+    ],
+    hazards: [],
+    collectibles: [],
+    enemies: []
   }
 ];
 

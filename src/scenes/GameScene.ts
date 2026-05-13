@@ -7,7 +7,7 @@ import { getLevel } from '../levels/levelData';
 import { Hud } from '../systems/Hud';
 import { LevelManager } from '../systems/LevelManager';
 import { AudioManager } from '../systems/AudioManager';
-import type { GameSceneData, LevelData, PlatformData } from '../types';
+import type { GameSceneData, LevelData, LeverData, PlatformData } from '../types';
 
 export class GameScene extends Phaser.Scene {
   private player!: Player;
@@ -25,6 +25,11 @@ export class GameScene extends Phaser.Scene {
   private hazards!: Phaser.Physics.Arcade.StaticGroup;
   private collectibles!: Phaser.Physics.Arcade.Group;
   private goal!: Phaser.Physics.Arcade.Image;
+  private totemProjectiles!: Phaser.Physics.Arcade.Group;
+  private leverSprites!: Phaser.Physics.Arcade.Group;
+  private doorSprites!: Phaser.Physics.Arcade.StaticGroup;
+  private doorOpened = false;
+  private windZones!: Phaser.Physics.Arcade.StaticGroup;
   private audio = AudioManager.getInstance();
 
   constructor() {
@@ -41,7 +46,11 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.audio.startMusic(this);
+    if (LevelManager.isWorld2Level(this.level.id)) {
+      this.audio.startVolcanoMusic(this);
+    } else {
+      this.audio.startMusic(this);
+    }
     this.createBackground();
     this.createLevelObjects();
     this.createPlayer();
@@ -51,6 +60,10 @@ export class GameScene extends Phaser.Scene {
 
     this.hud = new Hud(this);
     this.updateHud();
+
+    this.input.keyboard!.on('keydown-C', () => {
+      this.scene.start('BossCondorScene', { lives: this.lives, score: this.score, seeds: this.seeds });
+    });
   }
 
   update(time: number): void {
@@ -63,9 +76,33 @@ export class GameScene extends Phaser.Scene {
     if (this.player.y > GAME_HEIGHT + 80) {
       this.damagePlayer(true);
     }
+
+    this.applyWindZones();
+  }
+
+  private applyWindZones(): void {
+    this.windZones.children.each((zone) => {
+      const zoneSprite = zone as Phaser.Physics.Arcade.Image;
+      const forceX = zoneSprite.getData('forceX') as number;
+      if (forceX && Phaser.Geom.Rectangle.Overlaps(
+        zoneSprite.getBounds(),
+        this.player.getBounds()
+      )) {
+        this.player.setVelocityX(this.player.body!.velocity.x + forceX * (1 / 60));
+      }
+      return true;
+    });
   }
 
   private createBackground(): void {
+    if (LevelManager.isWorld2Level(this.level.id)) {
+      this.createVolcanoBackground();
+    } else {
+      this.createRiverBackground();
+    }
+  }
+
+  private createRiverBackground(): void {
     const skyColor = this.level.id >= 5 ? 0x496978 : 0x84d8ef;
     const horizonColor = this.level.id >= 5 ? 0x385447 : 0x9edb8b;
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, skyColor);
@@ -87,6 +124,59 @@ export class GameScene extends Phaser.Scene {
       this.add.ellipse(x + 20, 487, 42, 20, 0x5bbf57);
     }
 
+    this.addLevelName();
+  }
+
+  private createVolcanoBackground(): void {
+    this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x4a2a0a);
+    this.add.rectangle(GAME_WIDTH / 2, 330, GAME_WIDTH, 210, 0x3a1a0a).setAlpha(0.55);
+
+    this.add.ellipse(750, 180, 160, 240, 0x2a0a00, 0.7);
+    this.add.ellipse(760, 60, 80, 100, 0xcc4400, 0.5);
+    this.add.triangle(760, 130, -20, 50, 20, 50, 0, 0, 0xff6600, 0.35);
+
+    const glow = this.add.circle(760, 130, 50, 0xff6600, 0.15);
+    this.tweens.add({
+      targets: glow,
+      alpha: 0.3,
+      scale: 1.3,
+      duration: 1200,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+
+    for (let x = -20; x < GAME_WIDTH + 40; x += 70) {
+      this.add.rectangle(x + 20, 360, 24, 120, 0x4a3a2a).setAlpha(0.5);
+      this.add.triangle(x + 20, 280, -20, 70, 20, 70, 0, 0, 0x5a3a1a).setAlpha(0.5);
+    }
+
+    this.add.rectangle(GAME_WIDTH / 2, 500, GAME_WIDTH, 80, 0x3a2a1a);
+    for (let x = 4; x < GAME_WIDTH; x += 38) {
+      this.add.ellipse(x, 480, 46, 20, 0x5a3a1a);
+    }
+
+    for (let i = 0; i < 25; i++) {
+      const ax = Phaser.Math.Between(0, GAME_WIDTH);
+      const ay = Phaser.Math.Between(-20, -5);
+      const size = Phaser.Math.Between(2, 5);
+      const ash = this.add.circle(ax, ay, size, 0x3a3a3a, 0.6);
+      this.tweens.add({
+        targets: ash,
+        x: ax + Phaser.Math.Between(-40, 40),
+        y: GAME_HEIGHT + 20,
+        alpha: 0,
+        duration: Phaser.Math.Between(4000, 8000),
+        repeat: -1,
+        delay: Phaser.Math.Between(0, 3000),
+        ease: 'Linear'
+      });
+    }
+
+    this.addLevelName();
+  }
+
+  private addLevelName(): void {
     this.add.text(24, 58, this.level.name, {
       fontFamily: 'Arial',
       fontSize: '22px',
@@ -114,6 +204,11 @@ export class GameScene extends Phaser.Scene {
     this.hazards = this.physics.add.staticGroup();
     this.collectibles = this.physics.add.group({ allowGravity: false });
     this.enemies = this.add.group();
+    this.totemProjectiles = this.physics.add.group({ allowGravity: false });
+    this.leverSprites = this.physics.add.group({ allowGravity: false });
+    this.doorSprites = this.physics.add.staticGroup();
+    this.windZones = this.physics.add.staticGroup();
+    this.doorOpened = false;
 
     this.level.platforms.forEach((platform) => this.createPlatform(platform));
     this.level.hazards.forEach((hazard) => {
@@ -121,12 +216,51 @@ export class GameScene extends Phaser.Scene {
       sprite.setDisplaySize(hazard.width, hazard.height);
       sprite.refreshBody();
       sprite.setData('type', hazard.type);
+      if (hazard.type === 'lava') {
+        this.tweens.add({
+          targets: sprite,
+          alpha: 0.7,
+          duration: 800,
+          yoyo: true,
+          repeat: -1,
+          ease: 'Sine.easeInOut'
+        });
+      }
     });
     this.level.collectibles.forEach((item) => {
       this.collectibles.add(new Collectible(this, item));
     });
     this.level.enemies.forEach((enemy) => {
-      this.enemies.add(new Enemy(this, enemy));
+      const e = new Enemy(this, enemy);
+      this.enemies.add(e);
+      if (enemy.kind === 'totem') {
+        this.time.addEvent({
+          delay: 2200,
+          loop: true,
+          callback: () => this.shootTotemProjectile(e as Enemy)
+        });
+      }
+    });
+
+    this.level.windZones?.forEach((zone) => {
+      const windSprite = this.windZones.create(zone.x, zone.y, 'water') as Phaser.Physics.Arcade.Image;
+      windSprite.setDisplaySize(zone.width, zone.height);
+      windSprite.refreshBody();
+      windSprite.setData('forceX', zone.forceX);
+      windSprite.setAlpha(0.3);
+      windSprite.setTint(0xaaddff);
+    });
+
+    this.level.levers?.forEach((lever) => {
+      const door = this.doorSprites.create(lever.doorX, lever.doorY, 'ancient-door') as Phaser.Physics.Arcade.Image;
+      door.setDisplaySize(lever.doorWidth, lever.doorHeight);
+      door.refreshBody();
+      door.setData('closed', true);
+
+      const leverSprite = this.leverSprites.create(lever.x, lever.y, 'lever') as Phaser.Physics.Arcade.Image;
+      (leverSprite.body as Phaser.Physics.Arcade.Body).allowGravity = false;
+      leverSprite.setData('lever', lever);
+      leverSprite.setData('door', door);
     });
 
     this.totalWatermelons = this.level.collectibles.filter((item) => item.type === 'watermelon').length;
@@ -136,7 +270,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createPlatform(platform: PlatformData): void {
-    const key = platform.disappearing ? 'disappearing-platform' : platform.moving ? 'moving-platform' : 'platform';
+    const key = platform.disappearing ? 'disappearing-platform' : platform.moving ? 'moving-platform' : platform.breakable ? 'breakable-platform' : 'platform';
     if (platform.moving) {
       const sprite = this.movingPlatforms.create(platform.x, platform.y, key) as Phaser.Physics.Arcade.Image;
       sprite.setDisplaySize(platform.width, platform.height);
@@ -160,6 +294,7 @@ export class GameScene extends Phaser.Scene {
     sprite.setDisplaySize(platform.width, platform.height);
     sprite.refreshBody();
     sprite.setData('disappearing', platform.disappearing ?? false);
+    sprite.setData('breakable', platform.breakable ?? false);
   }
 
   private createPlayer(): void {
@@ -173,6 +308,25 @@ export class GameScene extends Phaser.Scene {
         this.time.delayedCall(350, () => {
           platformImage.disableBody(true, true);
           this.time.delayedCall(1800, () => platformImage.enableBody(false, platformImage.x, platformImage.y, true, true));
+        });
+      }
+      if (platformImage.getData('breakable') && !platformImage.getData('breaking')) {
+        platformImage.setData('breaking', true);
+        platformImage.setTint(0xff8888);
+        this.tweens.add({
+          targets: platformImage,
+          x: platformImage.x + 3,
+          duration: 50,
+          yoyo: true,
+          repeat: 3
+        });
+        this.time.delayedCall(400, () => {
+          platformImage.disableBody(true, true);
+          this.time.delayedCall(3000, () => {
+            platformImage.clearTint();
+            platformImage.setData('breaking', false);
+            platformImage.enableBody(false, platformImage.x, platformImage.y, true, true);
+          });
         });
       }
     });
@@ -189,11 +343,41 @@ export class GameScene extends Phaser.Scene {
         this.player.applyMudSlow(this.time.now);
         return;
       }
-
-      this.damagePlayer(type === 'water');
+      const resetPos = type === 'water' || type === 'lava';
+      this.damagePlayer(resetPos);
     });
     this.physics.add.overlap(this.player, this.enemies, () => this.damagePlayer(false));
+    this.physics.add.overlap(this.player, this.totemProjectiles, (_, projectile) => {
+      (projectile as Phaser.Physics.Arcade.Image).disableBody(true, true);
+      this.damagePlayer(false);
+    });
+    this.physics.add.overlap(this.player, this.leverSprites, (_, lever) => {
+      const leverImage = lever as Phaser.Physics.Arcade.Image;
+      if (leverImage.getData('activated')) {
+        return;
+      }
+      leverImage.setData('activated', true);
+      leverImage.setTint(0x88ff88);
+      const door = leverImage.getData('door') as Phaser.Physics.Arcade.Image;
+      if (door) {
+        door.disableBody(true, true);
+      }
+      this.doorOpened = true;
+    });
     this.physics.add.overlap(this.player, this.goal, () => this.completeLevel());
+  }
+
+  private shootTotemProjectile(totem: Enemy): void {
+    if (!totem.active) {
+      return;
+    }
+
+    const dir = this.player.x < totem.x ? -1 : 1;
+    const proj = this.totemProjectiles.create(totem.x, totem.y - 10, 'moving-platform') as Phaser.Physics.Arcade.Image;
+    proj.setDisplaySize(16, 16);
+    proj.setTint(0xff6600);
+    proj.setVelocityX(dir * 180);
+    this.time.delayedCall(2500, () => proj.disableBody(true, true));
   }
 
   private collectItem(collectible: Collectible): void {
@@ -251,7 +435,17 @@ export class GameScene extends Phaser.Scene {
     this.audio.playLevelUp(this);
 
     if (next === 'BossScene') {
-      this.scene.start('BossScene', { lives: this.lives, score: this.score, seeds: this.seeds });
+      this.scene.start('BossScene', { lives: this.lives, score: this.score, seeds: this.seeds, nextLevelId: this.level.id + 1 });
+      return;
+    }
+
+    if (next === 'BossCondorScene') {
+      this.scene.start('BossCondorScene', { lives: this.lives, score: this.score, seeds: this.seeds });
+      return;
+    }
+
+    if (next === 'BossJaguarScene') {
+      this.scene.start('BossJaguarScene', { lives: this.lives, score: this.score, seeds: this.seeds, nextLevelId: this.level.id + 1 });
       return;
     }
 

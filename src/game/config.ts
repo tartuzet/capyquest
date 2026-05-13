@@ -6,6 +6,8 @@ import { LevelSelectScene } from '../scenes/LevelSelectScene';
 import { GameScene } from '../scenes/GameScene';
 import { BossFrogScene } from '../scenes/BossFrogScene';
 import { IntermediateBossScene } from '../scenes/IntermediateBossScene';
+import { BossJaguarScene } from '../scenes/BossJaguarScene';
+import { BossCondorScene } from '../scenes/BossCondorScene';
 import { BossScene } from '../scenes/BossScene';
 import { GameOverScene } from '../scenes/GameOverScene';
 import { VictoryScene } from '../scenes/VictoryScene';
@@ -39,6 +41,8 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     GameScene,
     BossFrogScene,
     IntermediateBossScene,
+    BossJaguarScene,
+    BossCondorScene,
     BossScene,
     GameOverScene,
     VictoryScene

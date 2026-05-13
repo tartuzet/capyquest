@@ -1,77 +1,98 @@
 import Phaser from 'phaser';
-import { Boss } from '../entities/Boss';
+import { BossJaguar } from '../entities/BossJaguar';
 import { Player } from '../entities/Player';
 import { AudioManager } from '../systems/AudioManager';
 import { Hud } from '../systems/Hud';
 import type { GameSceneData } from '../types';
 
-export class BossScene extends Phaser.Scene {
+export class BossJaguarScene extends Phaser.Scene {
   private player!: Player;
-  private boss!: Boss;
+  private boss!: BossJaguar;
   private platforms!: Phaser.Physics.Arcade.StaticGroup;
-  private projectiles!: Phaser.Physics.Arcade.Group;
+  private clawWaves!: Phaser.Physics.Arcade.Group;
   private hud!: Hud;
   private lives = 3;
   private score = 0;
   private seeds = 0;
-  private nextLevelId = 0;
+  private nextLevelId = 21;
   private invulnerableUntil = 0;
   private audio = AudioManager.getInstance();
-  private shootSide = -1;
+  private bossHpText!: Phaser.GameObjects.Text;
+  private bossHpBar!: Phaser.GameObjects.Rectangle;
 
   constructor() {
-    super('BossScene');
+    super('BossJaguarScene');
   }
 
   init(data: GameSceneData): void {
     this.lives = data.lives ?? 3;
     this.score = data.score ?? 0;
     this.seeds = data.seeds ?? 0;
-    this.nextLevelId = data.nextLevelId ?? 0;
+    this.nextLevelId = data.nextLevelId ?? 21;
   }
 
   create(): void {
-    this.audio.startFinalBossMusic(this);
-    this.add.rectangle(480, 270, 960, 540, 0x3b5f46);
-    this.add.text(480, 55, 'Caiman Grunon', {
-      fontFamily: 'Arial',
-      fontSize: '34px',
-      color: '#ffffff',
-      stroke: '#1d2b2f',
-      strokeThickness: 5
-    }).setOrigin(0.5);
+    this.audio.startIntermediateBossMusic(this);
+    this.add.rectangle(480, 270, 960, 540, 0x0a0a0a);
 
     this.platforms = this.physics.add.staticGroup();
     const ground = this.platforms.create(480, 510, 'platform') as Phaser.Physics.Arcade.Image;
     ground.setDisplaySize(960, 60);
     ground.refreshBody();
 
+    const midPlat = this.platforms.create(400, 370, 'breakable-platform') as Phaser.Physics.Arcade.Image;
+    midPlat.setDisplaySize(140, 24);
+    midPlat.refreshBody();
+
+    const highPlat = this.platforms.create(650, 280, 'platform') as Phaser.Physics.Arcade.Image;
+    highPlat.setDisplaySize(140, 24);
+    highPlat.refreshBody();
+
     this.player = new Player(this, 140, 420);
     this.events.on('player-jump', () => this.audio.playJump(this));
-    this.boss = new Boss(this, 740, 420);
-    this.projectiles = this.physics.add.group({ allowGravity: false });
+    this.boss = new BossJaguar(this, 740, 400);
+    this.clawWaves = this.physics.add.group({ allowGravity: false });
 
     this.physics.add.collider(this.player, this.platforms);
     this.physics.add.collider(this.boss, this.platforms);
     this.physics.add.overlap(this.player, this.boss, () => this.handleBossContact());
-    this.physics.add.overlap(this.player, this.projectiles, (_, projectile) => {
-      (projectile as Phaser.Physics.Arcade.Image).disableBody(true, true);
+    this.physics.add.overlap(this.player, this.clawWaves, (_, wave) => {
+      (wave as Phaser.Physics.Arcade.Image).disableBody(true, true);
       this.damagePlayer();
     });
 
     this.time.addEvent({
-      delay: 1400,
+      delay: 2000,
       loop: true,
-      callback: () => this.launchLog()
+      callback: () => this.launchClawWave()
     });
 
+    this.createBossHpBar();
     this.hud = new Hud(this);
     this.updateHud();
   }
 
   update(time: number): void {
     this.player.update(time);
-    this.boss.update();
+    this.boss.update(time);
+  }
+
+  private createBossHpBar(): void {
+    this.bossHpText = this.add.text(480, 16, 'Jaguar de Obsidiana', {
+      fontFamily: 'Arial',
+      fontSize: '18px',
+      color: '#ff8844',
+      stroke: '#000000',
+      strokeThickness: 3
+    }).setOrigin(0.5).setDepth(100);
+
+    this.add.rectangle(480, 40, 202, 14, 0x000000).setDepth(100);
+    this.bossHpBar = this.add.rectangle(480, 40, 200, 12, 0xff4400).setDepth(101);
+  }
+
+  private updateBossHp(): void {
+    const ratio = Math.max(0, this.boss.hp / 3);
+    this.bossHpBar.setScale(ratio, 1);
   }
 
   private handleBossContact(): void {
@@ -85,20 +106,17 @@ export class BossScene extends Phaser.Scene {
       const defeated = this.boss.takeHit();
       this.audio.playBossDamage(this);
       this.player.setVelocityY(-360);
-      this.score += 1000;
+      this.score += 800;
       this.updateHud();
+      this.updateBossHp();
 
       if (defeated) {
-        if (this.nextLevelId > 0) {
-          this.scene.start('GameScene', {
-            levelId: this.nextLevelId,
-            lives: this.lives,
-            score: this.score,
-            seeds: this.seeds
-          });
-        } else {
-          this.scene.start('VictoryScene', { score: this.score, seeds: this.seeds });
-        }
+        this.scene.start('GameScene', {
+          levelId: this.nextLevelId,
+          lives: this.lives,
+          score: this.score,
+          seeds: this.seeds
+        });
       }
       return;
     }
@@ -106,22 +124,20 @@ export class BossScene extends Phaser.Scene {
     this.damagePlayer();
   }
 
-  private launchLog(): void {
+  private launchClawWave(): void {
     if (!this.boss.active) {
       return;
     }
 
-    this.shootSide *= -1;
+    const direction = this.boss.direction;
+    const startX = direction === -1 ? this.boss.x - 60 : this.boss.x + 60;
 
-    const startX = this.shootSide === -1 ? this.boss.x - 75 : this.boss.x + 75;
-    const velocityX = this.shootSide * (-220 - (3 - this.boss.hp) * 60);
-
-    const projectile = this.projectiles.create(startX, this.boss.y - 10, 'moving-platform') as Phaser.Physics.Arcade.Image;
+    const wave = this.clawWaves.create(startX, this.boss.y - 10, 'moving-platform') as Phaser.Physics.Arcade.Image;
     this.audio.playShoot(this);
-    projectile.setDisplaySize(46, 18);
-    projectile.setVelocityX(velocityX);
-    projectile.setData('born', this.time.now);
-    this.time.delayedCall(3600, () => projectile.disableBody(true, true));
+    wave.setDisplaySize(36, 14);
+    wave.setTint(0x8844ff);
+    wave.setVelocityX(direction * -200);
+    this.time.delayedCall(3000, () => wave.disableBody(true, true));
   }
 
   private damagePlayer(): void {
@@ -137,7 +153,7 @@ export class BossScene extends Phaser.Scene {
     this.time.delayedCall(250, () => this.player.clearTint());
 
     if (this.lives <= 0) {
-      this.scene.start('GameOverScene', { levelId: 15, score: this.score, seeds: this.seeds });
+      this.scene.start('GameOverScene', { levelId: 20, score: this.score, seeds: this.seeds });
       return;
     }
 
@@ -148,7 +164,7 @@ export class BossScene extends Phaser.Scene {
 
   private updateHud(): void {
     this.hud.update({
-      level: 15,
+      level: 20,
       lives: this.lives,
       score: this.score,
       watermelons: 0,

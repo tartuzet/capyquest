@@ -22,16 +22,28 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.patrolDistance = data.patrolDistance ?? 110;
     this.speed = data.speed ?? 55;
     this.phase = data.x * 0.01;
+    this.setData('kind', data.kind);
     this.setCollideWorldBounds(false);
     if (this.kind === 'frog') {
       this.setSize(38, 26);
       this.setOffset(7, 12);
+    } else if (this.kind === 'iguana') {
+      this.setSize(40, 28);
+      this.setOffset(4, 12);
+    } else if (this.kind === 'totem') {
+      this.setSize(30, 40);
+      this.setOffset(8, 6);
+      const body = this.body as Phaser.Physics.Arcade.Body;
+      body.setImmovable(true);
+    } else if (this.kind === 'snake') {
+      this.setSize(40, 14);
+      this.setOffset(4, 10);
     } else {
       this.setSize(34, 28);
       this.setOffset(3, 8);
     }
 
-    if (this.kind === 'toucan' || this.kind === 'bat') {
+    if (this.kind === 'toucan' || this.kind === 'bat' || this.kind === 'cave-bat' || this.kind === 'fire-bird') {
       const body = this.body as Phaser.Physics.Arcade.Body;
       body.allowGravity = false;
       body.setImmovable(true);
@@ -39,11 +51,11 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   update(time: number): void {
-    if (this.kind === 'bat') {
+    if (this.kind === 'bat' || this.kind === 'cave-bat') {
       this.updateFlying(time, 34);
       return;
-    } else if (this.kind === 'toucan') {
-      this.updateFlying(time, 12);
+    } else if (this.kind === 'toucan' || this.kind === 'fire-bird') {
+      this.updateFlying(time, this.kind === 'fire-bird' ? 20 : 12);
       return;
     } else if (this.kind === 'frog') {
       this.setVelocityX(this.speed * this.direction);

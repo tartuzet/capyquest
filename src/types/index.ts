@@ -1,4 +1,6 @@
-export type EnemyKind = 'frog' | 'crab' | 'toucan' | 'bat' | 'small-caiman';
+export type EnemyKind = 'frog' | 'crab' | 'toucan' | 'bat' | 'small-caiman' | 'cave-bat' | 'iguana' | 'rock-beetle' | 'totem' | 'snake' | 'fire-bird';
+
+export type HazardType = 'spikes' | 'mud' | 'water' | 'lava';
 
 export interface PlatformData {
   x: number;
@@ -11,10 +13,11 @@ export interface PlatformData {
     speed: number;
   };
   disappearing?: boolean;
+  breakable?: boolean;
 }
 
 export interface HazardData {
-  type: 'spikes' | 'mud' | 'water';
+  type: HazardType;
   x: number;
   y: number;
   width: number;
@@ -35,6 +38,23 @@ export interface EnemyData {
   speed?: number;
 }
 
+export interface LeverData {
+  x: number;
+  y: number;
+  doorX: number;
+  doorY: number;
+  doorWidth: number;
+  doorHeight: number;
+}
+
+export interface WindZoneData {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  forceX: number;
+}
+
 export interface LevelData {
   id: number;
   name: string;
@@ -45,6 +65,8 @@ export interface LevelData {
   hazards: HazardData[];
   collectibles: CollectibleData[];
   enemies: EnemyData[];
+  levers?: LeverData[];
+  windZones?: WindZoneData[];
 }
 
 export interface GameSceneData {

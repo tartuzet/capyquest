@@ -6,19 +6,32 @@ export class LevelManager {
 
   static readonly bossLevels = new Map<number, string>([
     [5, 'BossFrogScene'],
-    [10, 'IntermediateBossScene']
+    [10, 'IntermediateBossScene'],
+    [15, 'BossScene'],
+    [20, 'BossJaguarScene'],
+    [25, 'BossCondorScene']
   ]);
 
   static getNextLevel(currentLevel: number): number | string {
-    if (currentLevel >= this.finalLevel) {
-      return 'BossScene';
-    }
-
     const bossScene = this.bossLevels.get(currentLevel);
     if (bossScene) {
       return bossScene;
     }
 
-    return currentLevel + 1;
+    if (currentLevel >= this.finalLevel) {
+      return currentLevel;
+    }
+
+    const nextLevel = currentLevel + 1;
+    const nextBossScene = this.bossLevels.get(nextLevel);
+    if (nextBossScene) {
+      return nextBossScene;
+    }
+
+    return nextLevel;
+  }
+
+  static isWorld2Level(levelId: number): boolean {
+    return levelId >= 16;
   }
 }

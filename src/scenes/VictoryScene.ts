@@ -23,27 +23,38 @@ export class VictoryScene extends Phaser.Scene {
     this.add.rectangle(480, 270, 960, 540, 0x1f5e43);
     this.createConfetti();
 
-    this.add.text(480, 165, 'Victoria', {
+    this.add.text(480, 130, 'Victoria', {
       fontFamily: 'Arial',
       fontSize: '54px',
       color: '#f5c542',
       stroke: '#17313b',
       strokeThickness: 5
     }).setOrigin(0.5);
-    this.add.text(480, 250, 'Capi libero el rio y recupero las semillas doradas.', {
+    this.add.text(480, 210, 'Capi ha liberado el rio', {
       fontFamily: 'Arial',
       fontSize: '24px',
       color: '#ffffff'
     }).setOrigin(0.5);
-    this.add.text(480, 315, `Score final: ${this.score} | Semillas: ${this.seeds}`, {
+    this.add.text(480, 250, 'y recuperado las semillas doradas!', {
       fontFamily: 'Arial',
       fontSize: '24px',
       color: '#ffffff'
     }).setOrigin(0.5);
-    this.add.text(480, 395, 'Enter: jugar de nuevo | M: menu', {
+    this.add.text(480, 310, `Score final: ${this.score} | Semillas: ${this.seeds}`, {
+      fontFamily: 'Arial',
+      fontSize: '24px',
+      color: '#f5c542'
+    }).setOrigin(0.5);
+    this.add.text(480, 400, 'Enter: jugar de nuevo | M: menu', {
       fontFamily: 'Arial',
       fontSize: '22px',
       color: '#ffffff'
+    }).setOrigin(0.5);
+
+    this.add.text(480, 470, 'Gracias por jugar CapyQuest!', {
+      fontFamily: 'Arial',
+      fontSize: '16px',
+      color: '#88cc88'
     }).setOrigin(0.5);
 
     this.input.keyboard!.once('keydown-ENTER', () => {

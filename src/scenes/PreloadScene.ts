@@ -23,6 +23,7 @@ export class PreloadScene extends Phaser.Scene {
     this.load.audio('bg-music', '/assets/audio/bg-music.mp3');
     this.load.audio('final-boss', '/assets/audio/final_boss.mp3');
     this.load.audio('intermediate-boss', '/assets/audio/final_boss.mp3');
+    this.load.audio('volcano-theme', '/assets/audio/bg-music.mp3');
     this.load.audio('level-up', '/assets/audio/levelup.mp3');
     this.load.audio('capi-hit', '/assets/audio/capi_hit.mp3');
     this.load.audio('capi-jump', '/assets/audio/capi_jump.mp3');
@@ -264,9 +265,17 @@ export class PreloadScene extends Phaser.Scene {
     this.makeToucanTexture();
     this.makeBatTexture();
     this.makeSmallCaimanTexture();
+    this.makeCaveBatTexture();
+    this.makeIguanaTexture();
+    this.makeRockBeetleTexture();
+    this.makeTotemTexture();
+    this.makeSnakeTexture();
+    this.makeFireBirdTexture();
     this.makeBossTexture();
     this.makeBossCrabTexture();
     this.makeBossFrogTexture();
+    this.makeBossJaguarTexture();
+    this.makeBossCondorTexture();
   }
 
   private makeFrogTexture(): void {
@@ -399,6 +408,152 @@ export class PreloadScene extends Phaser.Scene {
     g.fillStyle(0x111111, 1);
     g.fillCircle(19, 14, 2);
     g.generateTexture('enemy-small-caiman', 62, 42);
+    g.destroy();
+  }
+
+  private makeCaveBatTexture(): void {
+    const g = this.add.graphics();
+    g.lineStyle(3, 0x0e0a14, 1);
+    g.fillStyle(0x2a1a3a, 1);
+    g.fillTriangle(23, 21, 1, 8, 10, 31);
+    g.fillTriangle(25, 21, 49, 8, 40, 31);
+    g.fillEllipse(25, 22, 24, 19);
+    g.strokeEllipse(25, 22, 24, 19);
+    g.fillStyle(0x8a3a3a, 1);
+    g.fillTriangle(18, 13, 21, 5, 24, 14);
+    g.fillTriangle(27, 14, 31, 5, 33, 14);
+    g.fillStyle(0xff4444, 1);
+    g.fillCircle(21, 20, 3);
+    g.fillCircle(29, 20, 3);
+    g.fillStyle(0x000000, 1);
+    g.fillCircle(21, 20, 2);
+    g.fillCircle(29, 20, 2);
+    g.generateTexture('enemy-cave-bat', 50, 38);
+    g.destroy();
+  }
+
+  private makeIguanaTexture(): void {
+    const g = this.add.graphics();
+    g.fillStyle(0x000000, 0.18);
+    g.fillEllipse(30, 34, 50, 7);
+    g.lineStyle(3, 0x1a3a1a, 1);
+    g.fillStyle(0x3a8a3a, 1);
+    g.fillRoundedRect(4, 18, 44, 20, 6);
+    g.strokeRoundedRect(4, 18, 44, 20, 6);
+    g.fillStyle(0x5aba5a, 1);
+    g.fillRoundedRect(16, 22, 34, 14, 5);
+    g.lineStyle(2, 0x1a3a1a, 1);
+    g.strokeRoundedRect(16, 22, 34, 14, 5);
+    g.fillStyle(0xffcc00, 1);
+    g.fillCircle(14, 16, 4);
+    g.fillStyle(0x111111, 1);
+    g.fillCircle(15, 16, 2);
+    g.fillStyle(0x3a8a3a, 1);
+    g.fillTriangle(48, 22, 56, 26, 48, 32);
+    g.lineStyle(2, 0x1a3a1a, 1);
+    g.strokeTriangle(48, 22, 56, 26, 48, 32);
+    g.lineStyle(2, 0x1a3a1a, 1);
+    g.lineBetween(8, 36, 4, 42);
+    g.lineBetween(18, 38, 14, 44);
+    g.lineBetween(30, 38, 30, 44);
+    g.lineBetween(42, 38, 46, 44);
+    g.generateTexture('enemy-iguana', 58, 46);
+    g.destroy();
+  }
+
+  private makeRockBeetleTexture(): void {
+    const g = this.add.graphics();
+    g.fillStyle(0x000000, 0.18);
+    g.fillEllipse(28, 32, 46, 7);
+    g.lineStyle(3, 0x2a1a0a, 1);
+    g.fillStyle(0x6a4a2a, 1);
+    g.fillEllipse(28, 24, 40, 24);
+    g.strokeEllipse(28, 24, 40, 24);
+    g.fillStyle(0x4a3018, 1);
+    g.fillEllipse(28, 22, 34, 18);
+    g.lineStyle(2, 0x2a1a0a, 1);
+    g.strokeEllipse(28, 22, 34, 18);
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(18, 16, 4);
+    g.fillCircle(38, 16, 4);
+    g.fillStyle(0x111111, 1);
+    g.fillCircle(18, 16, 2);
+    g.fillCircle(38, 16, 2);
+    g.lineStyle(2, 0x2a1a0a, 1);
+    g.lineBetween(8, 32, 2, 36);
+    g.lineBetween(48, 32, 54, 36);
+    g.lineBetween(14, 34, 10, 40);
+    g.lineBetween(42, 34, 46, 40);
+    g.generateTexture('enemy-rock-beetle', 56, 42);
+    g.destroy();
+  }
+
+  private makeTotemTexture(): void {
+    const g = this.add.graphics();
+    g.fillStyle(0x000000, 0.18);
+    g.fillEllipse(24, 46, 42, 7);
+    g.lineStyle(3, 0x3a2a1a, 1);
+    g.fillStyle(0x6a4a2a, 1);
+    g.fillRoundedRect(6, 8, 36, 34, 6);
+    g.strokeRoundedRect(6, 8, 36, 34, 6);
+    g.fillStyle(0x8a6a3a, 1);
+    g.fillRoundedRect(10, 14, 28, 20, 4);
+    g.fillStyle(0xc44a2e, 1);
+    g.fillCircle(24, 18, 5);
+    g.fillStyle(0xffcc00, 1);
+    g.fillCircle(20, 16, 2);
+    g.fillCircle(28, 16, 2);
+    g.fillStyle(0x111111, 1);
+    g.fillCircle(20, 16, 1);
+    g.fillCircle(28, 16, 1);
+    g.lineStyle(2, 0x3a2a1a, 1);
+    g.lineBetween(14, 30, 20, 28);
+    g.lineBetween(34, 30, 28, 28);
+    g.generateTexture('enemy-totem', 48, 50);
+    g.destroy();
+  }
+
+  private makeSnakeTexture(): void {
+    const g = this.add.graphics();
+    g.fillStyle(0x000000, 0.18);
+    g.fillEllipse(30, 24, 50, 6);
+    g.lineStyle(3, 0x1a3a1a, 1);
+    g.fillStyle(0x4a8a3a, 1);
+    g.fillRoundedRect(2, 8, 48, 14, 6);
+    g.strokeRoundedRect(2, 8, 48, 14, 6);
+    g.fillStyle(0x6aba4a, 1);
+    g.fillRoundedRect(8, 10, 36, 10, 5);
+    g.fillStyle(0xff4444, 1);
+    g.fillTriangle(48, 12, 56, 15, 48, 20);
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(10, 12, 3);
+    g.fillStyle(0x111111, 1);
+    g.fillCircle(10, 12, 1.5);
+    g.fillStyle(0xff4444, 1);
+    g.fillCircle(8, 10, 1);
+    g.generateTexture('enemy-snake', 56, 30);
+    g.destroy();
+  }
+
+  private makeFireBirdTexture(): void {
+    const g = this.add.graphics();
+    g.lineStyle(3, 0x4a1500, 1);
+    g.fillStyle(0xcc4400, 1);
+    g.fillEllipse(28, 22, 40, 28);
+    g.strokeEllipse(28, 22, 40, 28);
+    g.fillStyle(0xff6600, 1);
+    g.fillEllipse(22, 18, 24, 18);
+    g.fillStyle(0xffcc00, 1);
+    g.fillEllipse(44, 20, 22, 12);
+    g.lineStyle(2, 0x8a2a00, 1);
+    g.strokeEllipse(44, 20, 22, 12);
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(22, 16, 4);
+    g.fillStyle(0x111111, 1);
+    g.fillCircle(23, 16, 2);
+    g.fillStyle(0xffcc00, 1);
+    g.fillTriangle(12, 24, 0, 16, 6, 30);
+    g.generateTexture('enemy-fire-bird', 56, 38);
     g.destroy();
   }
 
@@ -676,6 +831,112 @@ export class PreloadScene extends Phaser.Scene {
     g.lineBetween(x - 2, y + 7, x + 8 * direction, y + 16);
   }
 
+  private makeBossJaguarTexture(): void {
+    const g = this.add.graphics();
+    const outline = 0x0a0a0a;
+    const body = 0x1a1a2a;
+    const spots = 0xcc4400;
+
+    g.fillStyle(0x000000, 0.2);
+    g.fillEllipse(96, 90, 170, 14);
+
+    g.lineStyle(4, outline, 1);
+    g.fillStyle(body, 1);
+    g.fillEllipse(96, 62, 120, 52);
+    g.strokeEllipse(96, 62, 120, 52);
+
+    g.fillStyle(body, 1);
+    g.fillEllipse(140, 60, 60, 40);
+    g.strokeEllipse(140, 60, 60, 40);
+
+    g.fillStyle(0xffcc00, 1);
+    g.fillCircle(155, 48, 8);
+    g.fillStyle(0x111111, 1);
+    g.fillCircle(157, 48, 4);
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(158, 46, 2);
+
+    g.fillStyle(spots, 1);
+    const spotPositions = [
+      [70, 55, 6], [90, 48, 8], [108, 52, 6],
+      [80, 72, 5], [100, 68, 7], [120, 60, 5]
+    ];
+    spotPositions.forEach(([sx, sy, size]) => {
+      g.fillCircle(sx, sy, size);
+    });
+
+    g.lineStyle(3, outline, 1);
+    g.fillStyle(body, 1);
+    this.drawJaguarLeg(g, 60, 78);
+    this.drawJaguarLeg(g, 85, 80);
+    this.drawJaguarLeg(g, 110, 80);
+    this.drawJaguarLeg(g, 130, 78);
+
+    g.lineStyle(3, outline, 1);
+    g.lineBetween(148, 64, 178, 70);
+    g.lineBetween(146, 70, 176, 76);
+    g.lineBetween(148, 76, 174, 82);
+
+    g.generateTexture('boss-jaguar', 192, 96);
+    g.destroy();
+  }
+
+  private makeBossCondorTexture(): void {
+    const g = this.add.graphics();
+    const outline = 0x4a1500;
+    const body = 0xcc3300;
+    const wing = 0x884400;
+    const belly = 0xff8844;
+
+    g.fillStyle(0x000000, 0.2);
+    g.fillEllipse(96, 95, 170, 14);
+
+    g.lineStyle(4, outline, 1);
+    g.fillStyle(body, 1);
+    g.fillEllipse(96, 65, 90, 50);
+    g.strokeEllipse(96, 65, 90, 50);
+
+    g.fillStyle(wing, 1);
+    g.fillTriangle(20, 20, 60, 55, 10, 60);
+    g.strokeTriangle(20, 20, 60, 55, 10, 60);
+    g.fillTriangle(172, 20, 132, 55, 182, 60);
+    g.strokeTriangle(172, 20, 132, 55, 182, 60);
+
+    g.fillStyle(belly, 1);
+    g.fillEllipse(96, 78, 60, 24);
+
+    g.fillStyle(0xffcc00, 1);
+    g.fillCircle(60, 50, 8);
+    g.fillCircle(132, 50, 8);
+    g.fillStyle(0x111111, 1);
+    g.fillCircle(60, 50, 4);
+    g.fillCircle(132, 50, 4);
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(61, 48, 2);
+    g.fillCircle(133, 48, 2);
+
+    g.lineStyle(4, outline, 1);
+    g.fillStyle(0xffaa00, 1);
+    g.fillTriangle(90, 88, 96, 100, 102, 88);
+    g.strokeTriangle(90, 88, 96, 100, 102, 88);
+
+    g.lineStyle(3, outline, 1);
+    g.lineBetween(88, 88, 70, 82);
+    g.lineBetween(104, 88, 122, 82);
+    g.lineBetween(92, 100, 80, 108);
+    g.lineBetween(100, 100, 112, 108);
+
+    g.generateTexture('boss-condor', 192, 110);
+    g.destroy();
+  }
+
+  private drawJaguarLeg(g: Phaser.GameObjects.Graphics, x: number, y: number): void {
+    g.lineStyle(3, 0x0a0a0a, 1);
+    g.fillStyle(0x1a1a2a, 1);
+    g.fillRoundedRect(x - 6, y - 6, 14, 12, 5);
+    g.strokeRoundedRect(x - 6, y - 6, 14, 12, 5);
+  }
+
   private drawBossLeg(g: Phaser.GameObjects.Graphics, x: number, y: number, outline: number): void {
     g.lineStyle(4, outline, 1);
     g.fillStyle(0x324621, 1);
@@ -686,14 +947,33 @@ export class PreloadScene extends Phaser.Scene {
     g.fillTriangle(x, y + 4, x + 5, y + 12, x + 9, y + 3);
   }
 
+  private makeFireballTexture(): void {
+    const g = this.add.graphics();
+    g.fillStyle(0xff4400, 1);
+    g.fillCircle(12, 12, 12);
+    g.fillStyle(0xff8800, 1);
+    g.fillCircle(10, 10, 8);
+    g.fillStyle(0xffcc00, 1);
+    g.fillCircle(8, 8, 4);
+    g.fillStyle(0xffaa00, 0.5);
+    g.fillCircle(14, 14, 6);
+    g.generateTexture('fireball', 24, 24);
+    g.destroy();
+  }
+
   private createWorldTextures(): void {
     this.makePlatformTexture('platform', 0x7b4f2a, 0x35a853, 0x5b351f, false, false);
     this.makePlatformTexture('moving-platform', 0x8b5b32, 0x58b9cf, 0x5a3d2b, true, false);
     this.makePlatformTexture('disappearing-platform', 0x6f5b35, 0xa4d65e, 0x4e4328, false, true);
+    this.makePlatformTexture('breakable-platform', 0x7a4a2a, 0x8a6a3a, 0x4a2a18, false, true);
     this.makeMudTexture();
     this.makeWaterTexture();
+    this.makeLavaTexture();
     this.makeSpikesTexture();
     this.makeGoalTexture();
+    this.makeLeverTexture();
+    this.makeAncientDoorTexture();
+    this.makeFireballTexture();
   }
 
   private makePlatformTexture(
@@ -782,6 +1062,31 @@ export class PreloadScene extends Phaser.Scene {
     g.destroy();
   }
 
+  private makeLavaTexture(): void {
+    const g = this.add.graphics();
+    g.fillStyle(0xcc3300, 1);
+    g.fillRoundedRect(0, 7, 64, 24, 8);
+    g.fillStyle(0xff6600, 0.85);
+    for (let x = -6; x < 64; x += 18) {
+      g.fillEllipse(x + 9, 12, 20, 7);
+    }
+    g.lineStyle(2, 0xffcc00, 0.9);
+    g.beginPath();
+    g.moveTo(5, 18);
+    g.lineTo(15, 15);
+    g.lineTo(25, 18);
+    g.lineTo(35, 15);
+    g.lineTo(45, 18);
+    g.lineTo(58, 15);
+    g.strokePath();
+    g.fillStyle(0xff9900, 0.5);
+    g.fillCircle(8, 14, 3);
+    g.fillCircle(28, 16, 2);
+    g.fillCircle(48, 14, 3);
+    g.generateTexture('lava', 64, 36);
+    g.destroy();
+  }
+
   private makeSpikesTexture(): void {
     const g = this.add.graphics();
     g.fillStyle(0x000000, 0.18);
@@ -823,6 +1128,38 @@ export class PreloadScene extends Phaser.Scene {
     g.fillEllipse(22, 59, 12, 8);
     g.fillEllipse(42, 58, 12, 8);
     g.generateTexture('goal', 64, 96);
+    g.destroy();
+  }
+
+  private makeLeverTexture(): void {
+    const g = this.add.graphics();
+    g.lineStyle(3, 0x3a2a1a, 1);
+    g.fillStyle(0x6a4a2a, 1);
+    g.fillRoundedRect(6, 20, 20, 18, 4);
+    g.strokeRoundedRect(6, 20, 20, 18, 4);
+    g.fillStyle(0x8a6a3a, 1);
+    g.fillCircle(16, 29, 6);
+    g.lineStyle(4, 0xcc8800, 1);
+    g.lineBetween(16, 29, 16, 4);
+    g.fillStyle(0xffcc00, 1);
+    g.fillCircle(16, 4, 5);
+    g.generateTexture('lever', 32, 42);
+    g.destroy();
+  }
+
+  private makeAncientDoorTexture(): void {
+    const g = this.add.graphics();
+    g.lineStyle(3, 0x3a2a1a, 1);
+    g.fillStyle(0x6a4a2a, 1);
+    g.fillRoundedRect(0, 0, 24, 80, 4);
+    g.strokeRoundedRect(0, 0, 24, 80, 4);
+    g.fillStyle(0x8a6a3a, 1);
+    g.fillCircle(12, 20, 6);
+    g.fillCircle(12, 50, 6);
+    g.lineStyle(2, 0xcc8800, 1);
+    g.lineBetween(12, 10, 12, 60);
+    g.lineBetween(4, 35, 20, 35);
+    g.generateTexture('ancient-door', 24, 80);
     g.destroy();
   }
 }

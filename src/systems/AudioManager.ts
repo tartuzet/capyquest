@@ -39,6 +39,10 @@ export class AudioManager {
     this.startLoop(scene, 'intermediate-boss', 0.75);
   }
 
+  startVolcanoMusic(scene: Phaser.Scene): void {
+    this.startLoop(scene, 'volcano-theme', 0.7);
+  }
+
   stopMusic(): void {
     if (!this.music) {
       return;
