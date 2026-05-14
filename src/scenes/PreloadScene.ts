@@ -24,6 +24,7 @@ export class PreloadScene extends Phaser.Scene {
     this.load.audio('final-boss', '/assets/audio/final_boss.mp3');
     this.load.audio('intermediate-boss', '/assets/audio/final_boss.mp3');
     this.load.audio('volcano-theme', '/assets/audio/bg-music.mp3');
+    this.load.audio('bonus-level', '/assets/audio/bonuslevel.mp3');
     this.load.audio('level-up', '/assets/audio/levelup.mp3');
     this.load.audio('capi-hit', '/assets/audio/capi_hit.mp3');
     this.load.audio('capi-jump', '/assets/audio/capi_jump.mp3');

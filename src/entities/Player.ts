@@ -61,8 +61,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Extra safety clamp: never allow leaving the level from left/right edges.
     const halfWidth = this.displayWidth * 0.5;
-    const minX = halfWidth;
-    const maxX = this.scene.scale.width - halfWidth;
+    const worldBounds = this.scene.physics.world.bounds;
+    const minX = worldBounds.left + halfWidth;
+    const maxX = worldBounds.right - halfWidth;
     if (this.x < minX) {
       this.x = minX;
       if (body.velocity.x < 0) {

@@ -1,6 +1,7 @@
 export type EnemyKind = 'frog' | 'crab' | 'toucan' | 'bat' | 'small-caiman' | 'cave-bat' | 'iguana' | 'rock-beetle' | 'totem' | 'snake' | 'fire-bird';
 
 export type HazardType = 'spikes' | 'mud' | 'water' | 'lava';
+export type LevelType = 'standard' | 'vertical_escape';
 
 export interface PlatformData {
   x: number;
@@ -52,13 +53,41 @@ export interface WindZoneData {
   y: number;
   width: number;
   height: number;
-  forceX: number;
+  forceX?: number;
+  forceY?: number;
+}
+
+export interface RisingHazardConfig {
+  type: 'water' | 'lava';
+  speed: number;
+  startY: number;
+  maxSpeed?: number;
+  startDelayMs?: number;
+  damageMode?: 'reset' | 'hit';
+}
+
+export interface PerfectBonusConfig {
+  type: 'all_watermelons';
+  reward: 'extra_life';
+}
+
+export interface SteamJetData {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  activeMs: number;
+  cooldownMs: number;
+  startDelayMs?: number;
 }
 
 export interface LevelData {
   id: number;
   name: string;
   theme: string;
+  levelType?: LevelType;
+  worldWidth?: number;
+  worldHeight?: number;
   playerStart: { x: number; y: number };
   goal: { x: number; y: number; width: number; height: number };
   platforms: PlatformData[];
@@ -67,6 +96,9 @@ export interface LevelData {
   enemies: EnemyData[];
   levers?: LeverData[];
   windZones?: WindZoneData[];
+  risingHazard?: RisingHazardConfig;
+  perfectBonus?: PerfectBonusConfig;
+  steamJets?: SteamJetData[];
 }
 
 export interface GameSceneData {

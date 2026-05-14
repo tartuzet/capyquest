@@ -43,6 +43,10 @@ export class AudioManager {
     this.startLoop(scene, 'volcano-theme', 0.7);
   }
 
+  startBonusLevelMusic(scene: Phaser.Scene): void {
+    this.startLoop(scene, 'bonus-level', 0.72);
+  }
+
   stopMusic(): void {
     if (!this.music) {
       return;
