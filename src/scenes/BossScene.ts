@@ -89,16 +89,7 @@ export class BossScene extends Phaser.Scene {
       this.updateHud();
 
       if (defeated) {
-        if (this.nextLevelId > 0) {
-          this.scene.start('GameScene', {
-            levelId: this.nextLevelId,
-            lives: this.lives,
-            score: this.score,
-            seeds: this.seeds
-          });
-        } else {
-          this.scene.start('VictoryScene', { score: this.score, seeds: this.seeds });
-        }
+        this.scene.start('VictoryScene', { score: this.score, seeds: this.seeds });
       }
       return;
     }

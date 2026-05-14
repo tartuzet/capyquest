@@ -45,7 +45,7 @@ export class VictoryScene extends Phaser.Scene {
       fontSize: '24px',
       color: '#f5c542'
     }).setOrigin(0.5);
-    this.add.text(480, 400, 'Enter: jugar de nuevo | M: menu', {
+    this.add.text(480, 400, 'Enter: selector de mundos | M: menu', {
       fontFamily: 'Arial',
       fontSize: '22px',
       color: '#ffffff'
@@ -58,7 +58,7 @@ export class VictoryScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.input.keyboard!.once('keydown-ENTER', () => {
-      this.scene.start('GameScene', { levelId: 1, lives: 3, score: 0, seeds: 0 });
+      this.scene.start('WorldSelectScene');
     });
     this.input.keyboard!.once('keydown-M', () => this.scene.start('MainMenuScene'));
   }

@@ -30,6 +30,8 @@ export class PreloadScene extends Phaser.Scene {
     this.load.audio('boss-damage', '/assets/audio/damage.mp3');
     this.load.audio('boss-shoot', '/assets/audio/shoot.mp3');
     this.load.audio('victory', '/assets/audio/victory.mp3');
+    this.load.image('world-1-card', '/world1.png');
+    this.load.image('world-2-card', '/world2.png');
 
     if (!USE_EXTERNAL_PLAYER_SPRITES) {
       return;
@@ -48,7 +50,7 @@ export class PreloadScene extends Phaser.Scene {
     this.createCollectibleTextures();
     this.createEnemyTextures();
     this.createWorldTextures();
-    this.scene.start('MainMenuScene');
+    this.scene.start('WorldSelectScene');
   }
 
   private createPlayerTextures(): void {

@@ -428,9 +428,18 @@ export const levels: LevelData[] = [
       { x: 550, y: 330, width: 150, height: 24 },
       { x: 780, y: 390, width: 130, height: 24 }
     ],
-    hazards: [],
-    collectibles: [],
-    enemies: []
+    hazards: [
+      { type: 'lava', x: 430, y: 525, width: 220, height: 20 }
+    ],
+    collectibles: [
+      { type: 'watermelon', x: 300, y: 340 },
+      { type: 'watermelon', x: 550, y: 280 },
+      { type: 'golden-seed', x: 780, y: 340 }
+    ],
+    enemies: [
+      { kind: 'fire-bird', x: 620, y: 230, patrolDistance: 150, speed: 95 },
+      { kind: 'cave-bat', x: 460, y: 250, patrolDistance: 130, speed: 85 }
+    ]
   }
 ];
 

@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { AudioManager } from '../systems/AudioManager';
 
 export class MainMenuScene extends Phaser.Scene {
   constructor() {
@@ -21,7 +20,7 @@ export class MainMenuScene extends Phaser.Scene {
       fontSize: '20px',
       color: '#17313b'
     }).setOrigin(0.5);
-    this.add.text(480, 335, 'Enter: iniciar | L: seleccionar nivel', {
+    this.add.text(480, 335, 'Enter: seleccionar mundo | L: seleccionar nivel', {
       fontFamily: 'Arial',
       fontSize: '24px',
       color: '#ffffff',
@@ -30,8 +29,7 @@ export class MainMenuScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.input.keyboard!.once('keydown-ENTER', () => {
-      AudioManager.getInstance().startMusic(this);
-      this.scene.start('GameScene', { levelId: 1, lives: 3, score: 0, seeds: 0 });
+      this.scene.start('WorldSelectScene');
     });
     this.input.keyboard!.once('keydown-L', () => this.scene.start('LevelSelectScene'));
   }

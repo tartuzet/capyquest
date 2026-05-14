@@ -17,7 +17,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-    this.setCollideWorldBounds(false);
+    this.setCollideWorldBounds(true);
     this.setSize(50, 40);
     this.setOffset(12, 21);
     this.setDragX(900);
@@ -57,6 +57,22 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       this.setTexture(this.scene.textures.exists(runTexture) ? runTexture : 'capi-walk');
     } else {
       this.setTexture('capi-idle');
+    }
+
+    // Extra safety clamp: never allow leaving the level from left/right edges.
+    const halfWidth = this.displayWidth * 0.5;
+    const minX = halfWidth;
+    const maxX = this.scene.scale.width - halfWidth;
+    if (this.x < minX) {
+      this.x = minX;
+      if (body.velocity.x < 0) {
+        body.setVelocityX(0);
+      }
+    } else if (this.x > maxX) {
+      this.x = maxX;
+      if (body.velocity.x > 0) {
+        body.setVelocityX(0);
+      }
     }
   }
 

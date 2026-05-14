@@ -22,13 +22,7 @@ export class LevelManager {
       return currentLevel;
     }
 
-    const nextLevel = currentLevel + 1;
-    const nextBossScene = this.bossLevels.get(nextLevel);
-    if (nextBossScene) {
-      return nextBossScene;
-    }
-
-    return nextLevel;
+    return currentLevel + 1;
   }
 
   static isWorld2Level(levelId: number): boolean {
