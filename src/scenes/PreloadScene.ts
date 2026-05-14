@@ -31,6 +31,7 @@ export class PreloadScene extends Phaser.Scene {
     this.load.audio('boss-damage', '/assets/audio/damage.mp3');
     this.load.audio('boss-shoot', '/assets/audio/shoot.mp3');
     this.load.audio('victory', '/assets/audio/victory.mp3');
+    this.load.audio('countdown', '/assets/audio/countdown.mp3');
     this.load.image('world-1-card', '/world1.png');
     this.load.image('world-2-card', '/world2.png');
 

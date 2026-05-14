@@ -36,6 +36,10 @@ export class GameScene extends Phaser.Scene {
   private levelCompleted = false;
   private perfectBonusAwarded = false;
   private windZones!: Phaser.Physics.Arcade.StaticGroup;
+  private gameplayFrozen = false;
+  private countdownText?: Phaser.GameObjects.Text;
+  private countdownBackdrop?: Phaser.GameObjects.Rectangle;
+  private countdownTimeouts: number[] = [];
   private audio = AudioManager.getInstance();
 
   constructor() {
@@ -71,6 +75,7 @@ export class GameScene extends Phaser.Scene {
 
     this.hud = new Hud(this);
     this.updateHud();
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.clearCountdownTimeouts());
 
     this.input.keyboard!.on('keydown-C', () => {
       this.scene.start('BossCondorScene', { lives: this.lives, score: this.score, seeds: this.seeds });
@@ -81,9 +86,16 @@ export class GameScene extends Phaser.Scene {
     this.input.keyboard!.on('keydown-L', () => {
       this.scene.start('GameScene', { levelId: 22, lives: this.lives, score: this.score, seeds: this.seeds });
     });
+
+    if (this.isVerticalEscapeLevel()) {
+      this.startBonusCountdown();
+    }
   }
 
   update(time: number): void {
+    if (this.gameplayFrozen) {
+      return;
+    }
     const deltaMs = this.game.loop.delta;
     this.player.update(time);
     this.enemies.children.each((enemy) => {
@@ -706,5 +718,63 @@ export class GameScene extends Phaser.Scene {
       totalWatermelons: this.totalWatermelons,
       seeds: this.seeds
     });
+  }
+
+  private startBonusCountdown(): void {
+    this.gameplayFrozen = true;
+    this.physics.world.pause();
+    this.tweens.pauseAll();
+    this.time.timeScale = 0;
+
+    this.countdownBackdrop = this.add
+      .rectangle(this.cameras.main.centerX, this.cameras.main.centerY, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.28)
+      .setDepth(240)
+      .setScrollFactor(0);
+
+    this.countdownText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, '3', {
+      fontFamily: 'Arial Black',
+      fontSize: '92px',
+      color: '#ffffff',
+      stroke: '#1d2b2f',
+      strokeThickness: 10
+    }).setOrigin(0.5).setDepth(250).setScrollFactor(0);
+
+    if (this.cache.audio.exists('countdown')) {
+      this.sound.play('countdown', { volume: 1.8 });
+    }
+
+    this.scheduleCountdownText('3', 0);
+    this.scheduleCountdownText('2', 1000);
+    this.scheduleCountdownText('1', 2000);
+    this.scheduleCountdownText('JUMP', 3000);
+    this.scheduleCountdownFinish(4500);
+  }
+
+  private scheduleCountdownText(text: string, delayMs: number): void {
+    const id = window.setTimeout(() => {
+      this.countdownText?.setText(text);
+      this.countdownText?.setScale(text === 'JUMP' ? 1.15 : 1);
+    }, delayMs);
+    this.countdownTimeouts.push(id);
+  }
+
+  private scheduleCountdownFinish(delayMs: number): void {
+    const id = window.setTimeout(() => {
+      this.gameplayFrozen = false;
+      this.physics.world.resume();
+      this.tweens.resumeAll();
+      this.time.timeScale = 1;
+      this.countdownText?.destroy();
+      this.countdownBackdrop?.destroy();
+      this.countdownText = undefined;
+      this.countdownBackdrop = undefined;
+      this.clearCountdownTimeouts();
+    }, delayMs);
+    this.countdownTimeouts.push(id);
+  }
+
+  private clearCountdownTimeouts(): void {
+    this.countdownTimeouts.forEach((id) => window.clearTimeout(id));
+    this.countdownTimeouts = [];
   }
 }
