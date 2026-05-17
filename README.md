@@ -1,127 +1,45 @@
-# CapyQuest: El Rio Perdido
+# CapyQuest: El Río Perdido
 
 ![CapyQuest logo](./capi512x512.png)
 
-Juego de plataformas 2D hecho con Phaser donde controlas a **Capi** para recuperar semillas doradas y liberar el rio.
+**CapyQuest: El Río Perdido** es un juego de plataformas 2D hecho con Phaser, donde controlas a **Capi** para recuperar semillas doradas, recolectar sandías y liberar el río.
 
-## De que trata el juego
+---
 
-- Recorres 2 mundos principales: rio/selva y ruinas del volcan.
-- Superas niveles con plataformas moviles, trampas, enemigos y secciones de escape vertical.
-- Coleccionas sandias y semillas doradas para subir puntaje.
-- Enfrentas jefes (como Jaguar y Condor) hasta llegar al final.
+## Descargar y probar el juego
 
-## Stack usado
+Puedes descargar la última versión del APK desde la sección de **Releases**:
 
-- `TypeScript`
-- `Phaser 3`
-- `Vite`
-- `Capacitor` (`@capacitor/core`, `@capacitor/android`)
-- `Android Studio` + Gradle para empaquetar APK
+👉 [Descargar última versión](https://github.com/tartuzet/capyquest/releases/latest)
 
-## Galeria
+También puedes descargar directamente la versión beta actual:
 
-![Mundo 1](./world1.png)
-![Mundo 2](./world2.png)
+👉 [Descargar CapyQuest v0.1.0 beta](https://github.com/tartuzet/capyquest/releases/download/v0.1.0-beta/capyquest-v0.1.0-beta.apk)
 
-## Controles (teclado)
+> Esta es una versión beta. Puede tener errores, detalles visuales o ajustes pendientes.
 
-- `A / D` o `Flechas izquierda/derecha`: mover
-- `W` o `Flecha arriba` o `Espacio`: saltar
-- `Enter`: iniciar
+---
 
-## Ejecutar en local
+## Cómo instalarlo en Android o Fire TV
 
-1. Instala dependencias:
+### Android
 
-```bash
-npm install
-```
+1. Descarga el archivo `.apk`.
+2. Activa la instalación de apps desconocidas si el sistema lo solicita.
+3. Instala el APK.
+4. Abre el juego.
 
-2. Levanta el proyecto en modo desarrollo:
+### Fire TV
 
-```bash
-npm run dev
-```
+La forma más sencilla es usar la app **Downloader** en Fire TV:
 
-3. Compila build de produccion:
+1. Instala **Downloader** desde la tienda de apps de Fire TV.
+2. Abre Downloader.
+3. Pega o escribe el enlace directo del APK.
+4. Descarga e instala el juego.
+5. Abre CapyQuest desde tus apps.
 
-```bash
-npm run build
-```
+APK actual:
 
-## Como instalarlo en Fire TV
-
-> Requisitos: Fire TV y tu PC en la misma red, `ADB` instalado, y **Apps from Unknown Sources** habilitado en Fire TV.
-
-1. Compila el proyecto web:
-
-```bash
-npm install
-npm run build
-```
-
-2. Sincroniza archivos web a Android (Capacitor):
-
-```bash
-npx cap sync android
-```
-
-3. Genera el APK debug:
-
-```bash
-cd android
-.\gradlew assembleDebug
-```
-
-4. Ubica el APK generado en:
-
-`android/app/build/outputs/apk/debug/app-debug.apk`
-
-5. En Fire TV:
-- Ve a `Settings > My Fire TV > Developer Options`.
-- Activa `ADB Debugging`.
-
-6. Obtén la IP de Fire TV:
-- `Settings > My Fire TV > About > Network`.
-
-7. Instala por ADB desde tu PC:
-
-```bash
-adb connect TU_IP_FIRETV
-adb install -r android/app/build/outputs/apk/debug/app-debug.apk
-```
-
-8. Abre la app en Fire TV (aparece con el nombre `capyquest-rio-perdido`).
-
-## Reportar bugs
-
-Si encuentras un bug, abre un **Issue** en GitHub desde la pestana **Issues** del repo y agrega:
-
-- Modelo de Fire TV (o dispositivo) y version del sistema
-- Version del juego (commit/tag si aplica)
-- Pasos exactos para reproducir el problema
-- Resultado esperado vs resultado actual
-- Captura o video del bug
-- Logs si tienes `adb logcat`
-
-Plantilla sugerida:
-
-```md
-### Descripcion
-
-### Pasos para reproducir
-1.
-2.
-3.
-
-### Resultado esperado
-
-### Resultado actual
-
-### Entorno
-- Dispositivo:
-- SO:
-- Version del juego:
-```
-
+```txt
+https://github.com/tartuzet/capyquest/releases/download/v0.1.0-beta/capyquest-v0.1.0-beta.apk
