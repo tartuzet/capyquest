@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { MobileControls } from '../systems/MobileControls';
 
 export class MainMenuScene extends Phaser.Scene {
   constructor() {
@@ -20,7 +21,10 @@ export class MainMenuScene extends Phaser.Scene {
       fontSize: '20px',
       color: '#17313b'
     }).setOrigin(0.5);
-    this.add.text(480, 335, 'Enter: seleccionar mundo | L: seleccionar nivel', {
+    const controlsText = MobileControls.isEnabled()
+      ? 'Tocar boton para iniciar'
+      : 'Enter: seleccionar mundo | L: seleccionar nivel';
+    this.add.text(480, 335, controlsText, {
       fontFamily: 'Arial',
       fontSize: '24px',
       color: '#ffffff',
@@ -32,5 +36,21 @@ export class MainMenuScene extends Phaser.Scene {
       this.scene.start('WorldSelectScene');
     });
     this.input.keyboard!.once('keydown-L', () => this.scene.start('LevelSelectScene'));
+
+    if (MobileControls.isEnabled()) {
+      this.createTouchAction();
+    }
+  }
+
+  private createTouchAction(): void {
+    const start = this.add.text(480, 430, 'Jugar', {
+      fontFamily: 'Arial',
+      fontSize: '30px',
+      color: '#ffffff',
+      backgroundColor: '#2f9e44',
+      padding: { x: 24, y: 12 }
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+
+    start.on('pointerdown', () => this.scene.start('WorldSelectScene'));
   }
 }

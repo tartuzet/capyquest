@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { AudioManager } from '../systems/AudioManager';
+import { MobileControls } from '../systems/MobileControls';
 import type { GameSceneData } from '../types';
 
 export class VictoryScene extends Phaser.Scene {
@@ -45,7 +46,10 @@ export class VictoryScene extends Phaser.Scene {
       fontSize: '24px',
       color: '#f5c542'
     }).setOrigin(0.5);
-    this.add.text(480, 400, 'Enter: selector de mundos | M: menu', {
+    const controlsText = MobileControls.isEnabled()
+      ? 'Tocar boton para selector de mundos o menu'
+      : 'Enter: selector de mundos | M: menu';
+    this.add.text(480, 400, controlsText, {
       fontFamily: 'Arial',
       fontSize: '22px',
       color: '#ffffff'
@@ -61,6 +65,32 @@ export class VictoryScene extends Phaser.Scene {
       this.scene.start('WorldSelectScene');
     });
     this.input.keyboard!.once('keydown-M', () => this.scene.start('MainMenuScene'));
+
+    if (MobileControls.isEnabled()) {
+      this.createTouchActions();
+    }
+  }
+
+  private createTouchActions(): void {
+    const worlds = this.add.text(330, 450, 'Mundos', {
+      fontFamily: 'Arial',
+      fontSize: '26px',
+      color: '#ffffff',
+      backgroundColor: '#2f9e44',
+      padding: { x: 18, y: 10 }
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+
+    worlds.on('pointerdown', () => this.scene.start('WorldSelectScene'));
+
+    const menu = this.add.text(610, 450, 'Menu', {
+      fontFamily: 'Arial',
+      fontSize: '26px',
+      color: '#ffffff',
+      backgroundColor: '#3a4c66',
+      padding: { x: 18, y: 10 }
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+
+    menu.on('pointerdown', () => this.scene.start('MainMenuScene'));
   }
 
   private createConfetti(): void {

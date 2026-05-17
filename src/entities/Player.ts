@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { MobileControls } from '../systems/MobileControls';
 
 type CursorKeys = Phaser.Types.Input.Keyboard.CursorKeys;
 
@@ -26,15 +27,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.keyA = scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.keyD = scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.keyW = scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+
+    MobileControls.show();
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => MobileControls.hide());
   }
 
   update(time: number): void {
     const body = this.body as Phaser.Physics.Arcade.Body;
-    const isLeftDown = this.cursors.left.isDown || this.keyA.isDown;
-    const isRightDown = this.cursors.right.isDown || this.keyD.isDown;
+    const isLeftDown = this.cursors.left.isDown || this.keyA.isDown || MobileControls.isLeftPressed();
+    const isRightDown = this.cursors.right.isDown || this.keyD.isDown || MobileControls.isRightPressed();
     const isJumpDown = Phaser.Input.Keyboard.JustDown(this.cursors.space)
       || Phaser.Input.Keyboard.JustDown(this.cursors.up)
-      || Phaser.Input.Keyboard.JustDown(this.keyW);
+      || Phaser.Input.Keyboard.JustDown(this.keyW)
+      || MobileControls.consumeJumpPressed();
     const speed = time < this.slowedUntil ? this.moveSpeed * 0.55 : this.moveSpeed;
 
     if (isLeftDown) {
