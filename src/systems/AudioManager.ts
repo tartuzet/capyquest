@@ -8,6 +8,7 @@ export class AudioManager {
   private musicVolume = 1;
   private sfxVolume = 0.72;
   private toneVolume = 0.72;
+  private isSuspended = false;
   private readonly activeSfx = new Map<string, number>();
   private readonly lastPlayedAt = new Map<string, number>();
   private readonly sfxRules: Record<string, { cooldownMs: number; maxConcurrent: number }> = {
@@ -44,7 +45,8 @@ export class AudioManager {
   }
 
   startBonusLevelMusic(scene: Phaser.Scene): void {
-    this.startLoop(scene, 'bonus-level', 0.72);
+    const bonusSeekOffset = this.isFireTvEnvironment() ? 0.5 : 0;
+    this.startLoop(scene, 'bonus-level', 0.72, bonusSeekOffset);
   }
 
   stopMusic(): void {
@@ -56,6 +58,26 @@ export class AudioManager {
     this.music.destroy();
     this.music = undefined;
     this.musicKey = undefined;
+  }
+
+  pauseAllAudio(): void {
+    this.music?.pause();
+    const context = this.getContext();
+    if (context && context.state !== 'suspended') {
+      void context.suspend();
+    }
+    this.isSuspended = true;
+  }
+
+  resumeAllAudio(): void {
+    const context = this.getContext();
+    if (context && context.state === 'suspended') {
+      void context.resume();
+    }
+    if (this.music && this.isSuspended) {
+      this.music.resume();
+    }
+    this.isSuspended = false;
   }
 
   playJump(scene: Phaser.Scene): void {
@@ -132,7 +154,7 @@ export class AudioManager {
     sound.play();
   }
 
-  private startLoop(scene: Phaser.Scene, key: string, volume: number): void {
+  private startLoop(scene: Phaser.Scene, key: string, volume: number, seekOffset = 0): void {
     if (this.music?.isPlaying && this.musicKey === key) {
       return;
     }
@@ -140,9 +162,10 @@ export class AudioManager {
     this.stopMusic();
 
     if (scene.cache.audio.exists(key)) {
-      this.music = scene.sound.add(key, { loop: true, volume: volume * this.musicVolume });
+      this.music = scene.sound.add(key, { loop: true, volume: volume * this.musicVolume, seek: seekOffset });
       this.musicKey = key;
       this.music.play();
+      this.isSuspended = false;
     }
   }
 
@@ -217,5 +240,10 @@ export class AudioManager {
 
     this.context = new AudioContextClass();
     return this.context;
+  }
+
+  private isFireTvEnvironment(): boolean {
+    const ua = navigator.userAgent.toLowerCase();
+    return ua.includes('aft') || ua.includes('fire tv') || ua.includes('firetv');
   }
 }

@@ -740,7 +740,8 @@ export class GameScene extends Phaser.Scene {
     }).setOrigin(0.5).setDepth(250).setScrollFactor(0);
 
     if (this.cache.audio.exists('countdown')) {
-      this.sound.play('countdown', { volume: 1.8 });
+      const countdownSeekOffset = this.isFireTvEnvironment() ? 1 : 0;
+      this.sound.play('countdown', { volume: 1.8, seek: countdownSeekOffset });
     }
 
     this.scheduleCountdownText('3', 0);
@@ -776,5 +777,10 @@ export class GameScene extends Phaser.Scene {
   private clearCountdownTimeouts(): void {
     this.countdownTimeouts.forEach((id) => window.clearTimeout(id));
     this.countdownTimeouts = [];
+  }
+
+  private isFireTvEnvironment(): boolean {
+    const ua = navigator.userAgent.toLowerCase();
+    return ua.includes('aft') || ua.includes('fire tv') || ua.includes('firetv');
   }
 }
